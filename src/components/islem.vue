@@ -1,8 +1,8 @@
 <template>
     <div>
-        <button class="btn btn-info rounded-0" v-on:click="ekle()">Add</button>
-        <button class="btn btn-success rounded-0" v-on:click="duzenle()">Modify</button>
-        <button class="btn btn-danger rounded-0" v-on:click="sil()">Delete</button>
+        <button class="btn btn-info rounded-0" v-on:click="ekle()"><i class="fas fa-plus mr-2"></i>Add</button>
+        <button class="btn btn-success rounded-0" v-on:click="duzenle()"><i class="fas fa-pen mr-2"></i>Modify</button>
+        <button class="btn btn-danger rounded-0" v-on:click="sil()"><i class="far fa-trash-alt mr-2"></i>Delete</button>
     
 
     </div>
@@ -69,6 +69,8 @@
                     _self.transactWFS("delete", evt.selected[0])
                     _self.map.removeInteractionByType(ol.interaction.Select);
                 });
+
+
             },
 
             duzenle() {

@@ -1,8 +1,8 @@
 <template>
-    <div id="map" class="map" >
+    <div id="map" class="map">
         <div class="row" style="position:absolute;z-index:1000000;top:20px;left:60px;">
             <button type="button" class="btn btn-warning rounded-0" data-toggle="modal" data-target="#exampleModal">
-                Add Service
+                <i class="fas fa-globe"></i> Add Service
             </button>
             <!-- Modal -->
             <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -40,8 +40,9 @@
 
             <islem v-bind:map="map" v-bind:addedlayer="addedlayer" />
         </div>
-        <div class="p-3" style="background-color:#F8EFBA;position:absolute;z-index:1000000;top:59px;left:45px;width:220px;" v-if="items.length>0">
+        <div class="p-3" style="background-color:#F8EFBA;position:absolute;z-index:1000000;top:59px;left:45px;width:230px;" v-if="items.length>0">
             <h5>Layer List</h5>
+
             <div class="form-check" v-for="itemcheck in selectedLayers">
                 <input class="form-check-input" type="radio" :name="itemcheck" :value="itemcheck" v-model="checkradio">
                 <label class="form-check-label" :for="itemcheck">
@@ -49,12 +50,20 @@
                 </label>
             </div>
             <!--<button type="button" class="btn btn-dark text-white btn-block mt-2" v-on:click="openedit">{{addedlayer ? 'Edit Close' : 'Edit Open'}}</button>-->
-            <button type="button" class="btn btn-dark text-white btn-block mt-2" v-on:click="closeedit" v-if="addedlayer">Edit Close</button>
-            <button type="button" class="btn btn-dark text-white btn-block mt-2" v-on:click="openedit" v-else="!addedlayer">Edit Open</button>
+        
+
+            <div class="btn-group mt-2" role="group" aria-label="Basic example">
+                <button type="button" class="btn btn-danger text-white btn-block  rounded-0" v-on:click="closeedit" v-if="addedlayer">Edit</button>
+                <button type="button" class="btn btn-success text-white btn-block rounded-0" v-on:click="openedit" v-else="!addedlayer">Edit</button>
+                <snaptool class="ml-1" v-bind:map="map" v-bind:addedlayer="addedlayer" />
+            </div>
+
+
+
 
 
         </div>
-
+        
     </div>
  
 </template>
@@ -64,12 +73,14 @@
 <script>
 
     import islem from './components/islem.vue';
+    import snaptool from './components/snaptool.vue';
 
     export default {
         name: 'App',
 
         components: {
-            islem
+            islem,
+            snaptool
         },
         data() {
 
@@ -156,11 +167,11 @@
                 this.addedlayer = null;
                 this.checkradio = "";
             },
-    
+
             dene() {
                 var i;
                 for (i = 0; i < this.selectedLayers.length; i++) {
-                    debugger
+              
                     var url2 = this.someValue + "/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=" + this.someValue.split("/")[this.someValue.split("/").length - 1] + "%3A" + this.selectedLayers[i] + '&outputFormat=application%2Fjson';
                     var source = new ol.source.Vector({
                         url: url2,
@@ -181,15 +192,7 @@
                 }
             },
             addservicelayer() {
-                var style = new ol.style.Style({
-                    stroke: new ol.style.Stroke({
-                        color: 'blue',
-                        width: 1
-                    }),
-                    fill: new ol.style.Fill({
-                        color: "red"
-                    })
-                });
+              
                 var url2 = this.servicelayer.url + '/' + this.servicelayer.namespace + '/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=' + this.servicelayer.namespace + '%3A' + this.servicelayer.layer + '&outputFormat=application%2Fjson';
                 this.source = new ol.source.Vector({
                     url: url2,
@@ -201,7 +204,7 @@
                     className: "Feature Service",
 
                     source: this.source,
-                    style: style,
+                   
                 });
 
                 this.addedlayer.typeLayer = this.servicelayer.type
